@@ -1,0 +1,29 @@
+import git
+import os
+
+# Define the path for your local repository
+repo_path = './my_new_repo'
+
+# 1. Initialize a new repository (or load an existing one)
+if not os.path.exists(repo_path):
+    os.makedirs(repo_path)
+    repo = git.Repo.init(repo_path)
+    print(f"Repo initialized at {repo_path}")
+else:
+    repo = git.Repo(repo_path)
+    print("Existing repo loaded.")
+
+# 2. Create a dummy file to commit
+file_name = os.path.join(repo_path, 'example.txt')
+with open(file_name, 'w') as f:
+    f.write("Hello, GitPython!")
+
+# 3. Git Add & Commit
+repo.index.add([file_name])
+repo.index.commit("Initial commit via Python script")
+print("File added and committed.")
+
+# 4. Check the current branch and recent logs
+print(f"Current branch: {repo.active_branch.name}")
+for commit in repo.iter_commits(max_count=5):
+    print(f"Commit: {commit.hexsha} | Message: {commit.message.strip()}")
